@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.js"
+    ></script>
+<script>
+     $(()=>{
+            console.log("working")
+
+            $("#id").blur(()=>{
+                console.log("blurr");
+                let ip={id:$("#id").val()};
+                let parametertofun={
+                    data:ip,
+                    url:"http://localhost:8081/findelement",
+                    type:'get',
+                    datatype:'json',
+                    success:(datagivenbyserver)=>{
+                        console.log(datagivenbyserver);
+                        let item=datagivenbyserver;
+                        if(item.status){
+                        $("#name").val(item.con.bookname);
+                        $("#price").val(item.con.price);
+                        $("#msg").html("BookId Found");
+                    }else{
+                        $("#name").val("");
+                        $("#price").val("");
+                        $("#msg").html("BookId Not found");
+                    }
+                    },
+                    erroe:(errorgivenbyserver)=>{
+                        console.log("Error");
+                    }
+                }
+                $.ajax(parametertofun);
+            });
+
+
+
+            $("#update").click(()=>{
+                console.log("update");
+
+
+                let ip={id:$("#id").val(),name:$("#name").val(),price:$("#price").val()};
+                let parametertofun={
+                    data:ip,
+                    url:"http://localhost:8081/update",
+                    type:'get',
+                    datatype:'json',
+                    success:(datagivenbyserver)=>{
+                        console.log(datagivenbyserver);
+                        let item=datagivenbyserver;
+                        if(item.status){
+                        $("#msg").html("Item Updated Succesfully");
+                    }else{
+                        
+                        $("#msg").html("Item Not Updated Successfully");
+                    }
+                    },
+                    erroe:(errorgivenbyserver)=>{
+                        console.log("Error");
+                    }
+                }
+                $.ajax(parametertofun);
+            });
+        });
+</script>
+
+
+</head>
+<body>
+    Book id :<input type="text" id="id" placeholder="id"/><span id="msg"></span><br><br>
+    Name :<input type="text" id="name" placeholder="name"/><br><br>
+    Price :<input type="text" id="price" placeholder="price"/><br><br><hr>
+    <button id="update">Update Book</button>
+</body>
+</html>
